@@ -27,15 +27,18 @@ public class GameManager : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float enemy1Chance = 0.7f; // Enemy2 chance is (1 - enemy1Chance)
 
+    [SerializeField] private int totalTreasuresToWin = 3;
+    private int treasuresCollected = 0;
+    
     private void Start()
     {
         Debug.Log("Rooms found: " + rooms.Count);
 
         foreach (Room room in rooms)
         {
+            room.LockTreasure();
             room.ClearSpawns();
             GenerateRoomContents(room);
-
             Debug.Log($"{room.name}: EnemySpawns={room.EnemySpawns.Count}, LootSpawns={room.LootSpawns.Count}, SpawnedEnemies={room.AliveEnemies}");
         }
     }
@@ -100,6 +103,18 @@ public class GameManager : MonoBehaviour
         {
             int j = Random.Range(i, list.Count);
             (list[i], list[j]) = (list[j], list[i]);
+        }
+    }
+    
+    public void CollectTreasure()
+    {
+        treasuresCollected++;
+        Debug.Log($"Treasure collected: {treasuresCollected}/{totalTreasuresToWin}");
+
+        if (treasuresCollected >= totalTreasuresToWin)
+        {
+            Debug.Log("YOU WIN!");
+            // Later: show win UI, freeze controls, etc.
         }
     }
 }

@@ -9,6 +9,11 @@ public class RoomLogic : MonoBehaviour
     private bool isLocked = false;
     private bool isCleared = false;
     
+    private void Start()
+    {
+        UnlockRoom();
+    }
+    
     public void LockRoom()
     {
         isLocked = true;

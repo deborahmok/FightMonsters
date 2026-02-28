@@ -8,7 +8,9 @@ public class Room : MonoBehaviour
     [SerializeField] private Transform lootSpawnParent;
     [SerializeField] private Transform torchSpawnParent;   // optional
     [SerializeField] private Transform treasureSpot;
-
+    [SerializeField] private GameObject treasureObject;
+    [SerializeField] private RoomLogic roomLogic;
+    
     public List<Transform> EnemySpawns { get; private set; } = new();
     public List<Transform> LootSpawns { get; private set; } = new();
     public List<Transform> TorchSpawns { get; private set; } = new();
@@ -69,8 +71,21 @@ public class Room : MonoBehaviour
 
         if (AliveEnemies == 0)
         {
-            Debug.Log($"{name} cleared! (Treasure unlock later)");
-            // Later: Unlock treasure here
+            Debug.Log($"{name} cleared! Unlocking treasure.");
+            UnlockTreasure();
+            roomLogic?.UnlockRoom();
         }
+    }
+    
+    public void LockTreasure()
+    {
+        if (treasureObject != null)
+            treasureObject.SetActive(false);
+    }
+
+    public void UnlockTreasure()
+    {
+        if (treasureObject != null)
+            treasureObject.SetActive(true);
     }
 }

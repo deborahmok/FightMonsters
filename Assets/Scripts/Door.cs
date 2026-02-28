@@ -14,6 +14,11 @@ public class Door : MonoBehaviour
         doorBlocker.enabled = false;
     }
 
+    private void Awake()
+    {
+        Open(); // ensure door starts open each run
+    }
+    
     // private void OnTriggerEnter2D(Collider2D other)
     // {
     //     // Player starts entering
