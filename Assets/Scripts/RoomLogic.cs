@@ -1,9 +1,5 @@
 using UnityEngine;
 
-<<<<<<< HEAD
-=======
-// RoomLogic.cs - Attach to room parent object
->>>>>>> 07c166ee1cd49eda850a0f8ac49bb114efb5e91a
 public class RoomLogic : MonoBehaviour
 {
     [SerializeField] private Door door;

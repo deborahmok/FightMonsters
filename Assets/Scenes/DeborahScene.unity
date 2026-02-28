@@ -403,6 +403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Room
   enemySpawnParent: {fileID: 129302377}
   lootSpawnParent: {fileID: 665310287}
+  torchSpawnParent: {fileID: 1035620140}
   treasureObject: {fileID: 142018488}
   roomLogic: {fileID: 52344142}
   totalEnemiesToSpawn: 12
@@ -2525,6 +2526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Room
   enemySpawnParent: {fileID: 1288909976}
   lootSpawnParent: {fileID: 1032941319}
+  torchSpawnParent: {fileID: 2143629400}
   treasureObject: {fileID: 1230102810}
   roomLogic: {fileID: 909301201}
   totalEnemiesToSpawn: 12
@@ -3842,6 +3844,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1032941319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1366631008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1366631009}
+  m_Layer: 0
+  m_Name: Torches
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1366631009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366631008}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1376674514
 GameObject:
   m_ObjectHideFlags: 0
@@ -4408,6 +4441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Room
   enemySpawnParent: {fileID: 1991614367}
   lootSpawnParent: {fileID: 1133125626}
+  torchSpawnParent: {fileID: 228139876}
   treasureObject: {fileID: 885235406}
   roomLogic: {fileID: 1590612823}
   totalEnemiesToSpawn: 12
@@ -4838,12 +4872,16 @@ MonoBehaviour:
   enemy1Prefab: {fileID: 1187904082069337275, guid: 4331d0c05c9d1419b94096a9832ca912, type: 3}
   enemy2Prefab: {fileID: 6158899275716782592, guid: e5b3f22cf4bed4fdbb9604bc5ca06a07, type: 3}
   hpLootPrefab: {fileID: 7465153332620142915, guid: 1edb8bea8e6884d6bb24736ac4ef965c, type: 3}
+  torchPrefab: {fileID: 5397562610544771503, guid: fdb0c477275ef4b4291359426f46c7e2, type: 3}
   enemiesParent: {fileID: 507570194}
   pickupsParent: {fileID: 1597405601}
+  torchesParent: {fileID: 1366631009}
   minEnemiesPerRoom: 2
   maxEnemiesPerRoom: 5
   minLootPerRoom: 1
   maxLootPerRoom: 3
+  minTorchesPerRoom: 1
+  maxTorchesPerRoom: 3
   enemy1Chance: 0.7
   totalTreasuresToWin: 3
 --- !u!1 &1721835812
@@ -6576,3 +6614,4 @@ SceneRoots:
   - {fileID: 1917771648}
   - {fileID: 507570194}
   - {fileID: 1597405601}
+  - {fileID: 1366631009}

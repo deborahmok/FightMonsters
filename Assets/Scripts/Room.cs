@@ -7,6 +7,7 @@ public class Room : MonoBehaviour
     [Header("Anchors")]
     [SerializeField] private Transform enemySpawnParent;
     [SerializeField] private Transform lootSpawnParent;
+    [SerializeField] private Transform torchSpawnParent;
     [SerializeField] private GameObject treasureObject;
     [SerializeField] private RoomLogic roomLogic;
 
@@ -20,8 +21,10 @@ public class Room : MonoBehaviour
     [SerializeField] private int maxAggroAtOnce = 2;
     [SerializeField] private float aggroUpdateInterval = 0.5f;
 
+    
     public List<Transform> EnemySpawns { get; private set; } = new();
     public List<Transform> LootSpawns { get; private set; } = new();
+    public List<Transform> TorchSpawns { get; private set; } = new();
 
     private readonly List<GameObject> spawnedLoot = new();
     private readonly List<Enemy> enemyScripts = new();
@@ -32,16 +35,12 @@ public class Room : MonoBehaviour
     private int spawnedSoFar = 0;
     public int AliveEnemies { get; private set; } = 0;
     private bool roomStarted = false;
-
-    // private void Start()
-    // {
-    //     OnPlayerEnteredRoom();
-    // }
     
     private void Awake()
     {
         EnemySpawns = CollectChildren(enemySpawnParent);
         LootSpawns = CollectChildren(lootSpawnParent);
+        TorchSpawns = CollectChildren(torchSpawnParent);
         gm = FindObjectOfType<GameManager>();
     }
 

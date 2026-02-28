@@ -11,9 +11,11 @@ public class PlayerLight : MonoBehaviour
 
     private int torchCount;
     public int TorchCount => torchCount;
-
+    
     private void Start()
     {
+        var state = GetComponent<PlayerState>();
+        if (state != null) torchCount = state.Torches;
         UpdateGlow();
     }
 

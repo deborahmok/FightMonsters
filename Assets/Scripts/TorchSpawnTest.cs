@@ -8,7 +8,7 @@ public class TorchSpawnTest : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current.tKey.isPressed)
+        if (Keyboard.current != null && Keyboard.current.tKey.wasPressedThisFrame)
         {
             Debug.Log("Spawning torch...");
             Instantiate(torchPrefab, spawnPoint.position, Quaternion.identity, spawnPoint.parent);
