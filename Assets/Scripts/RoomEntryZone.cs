@@ -10,8 +10,8 @@ public class RoomEntryZone : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         triggered = true;
-        GetComponentInParent<RoomLogic>()?.LockRoom();
-        
+        GetComponentInParent<RoomLogic>()?.OnPlayerEnteredRoom();
+        Debug.Log("EntryZone triggered by: " + other.name);
         // Optional: destroy this trigger since it's one-time use
         // gameObject.SetActive(false);
     }

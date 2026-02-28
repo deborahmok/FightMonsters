@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 34020354}
   - component: {fileID: 34020356}
   - component: {fileID: 34020355}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +196,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -403,10 +403,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Room
   enemySpawnParent: {fileID: 129302377}
   lootSpawnParent: {fileID: 665310287}
-  torchSpawnParent: {fileID: 1035620140}
-  treasureSpot: {fileID: 26900664}
   treasureObject: {fileID: 142018488}
   roomLogic: {fileID: 52344142}
+  totalEnemiesToSpawn: 12
+  minWaveSize: 4
+  maxWaveSize: 6
+  activationStagger: 0.25
+  maxAggroAtOnce: 2
+  aggroUpdateInterval: 0.5
 --- !u!114 &52344142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,7 +424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomLogic
   door: {fileID: 666836743}
-  wallColliders: []
+  room: {fileID: 52344141}
 --- !u!1 &59076038
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,7 +743,7 @@ GameObject:
   - component: {fileID: 174750377}
   - component: {fileID: 174750379}
   - component: {fileID: 174750378}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -774,7 +778,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1009,7 +1013,7 @@ GameObject:
   - component: {fileID: 381173219}
   - component: {fileID: 381173221}
   - component: {fileID: 381173220}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1044,7 +1048,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1280,7 +1284,7 @@ GameObject:
   - component: {fileID: 547842315}
   - component: {fileID: 547842320}
   - component: {fileID: 547842322}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1840,7 +1844,7 @@ GameObject:
   - component: {fileID: 714418763}
   - component: {fileID: 714418765}
   - component: {fileID: 714418764}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1875,7 +1879,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2039,7 +2043,7 @@ GameObject:
   m_Component:
   - component: {fileID: 768015658}
   - component: {fileID: 768015659}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DoorBlocker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2074,7 +2078,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2521,10 +2525,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Room
   enemySpawnParent: {fileID: 1288909976}
   lootSpawnParent: {fileID: 1032941319}
-  torchSpawnParent: {fileID: 2143629400}
-  treasureSpot: {fileID: 589094456}
   treasureObject: {fileID: 1230102810}
   roomLogic: {fileID: 909301201}
+  totalEnemiesToSpawn: 12
+  minWaveSize: 4
+  maxWaveSize: 6
+  activationStagger: 0.25
+  maxAggroAtOnce: 2
+  aggroUpdateInterval: 0.5
 --- !u!114 &909301201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2538,7 +2546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomLogic
   door: {fileID: 1602435455}
-  wallColliders: []
+  room: {fileID: 909301200}
 --- !u!1 &933076857
 GameObject:
   m_ObjectHideFlags: 0
@@ -2597,7 +2605,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2640,7 +2648,7 @@ GameObject:
   m_Component:
   - component: {fileID: 954162285}
   - component: {fileID: 954162286}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DoorBlocker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2675,7 +2683,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2956,7 +2964,7 @@ GameObject:
   - component: {fileID: 1134216239}
   - component: {fileID: 1134216241}
   - component: {fileID: 1134216240}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2991,7 +2999,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3125,7 +3133,7 @@ GameObject:
   - component: {fileID: 1147534267}
   - component: {fileID: 1147534269}
   - component: {fileID: 1147534268}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3160,7 +3168,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3324,7 +3332,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1161210696}
   - component: {fileID: 1161210697}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DoorBlocker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3359,7 +3367,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3676,7 +3684,7 @@ GameObject:
   - component: {fileID: 1321287847}
   - component: {fileID: 1321287849}
   - component: {fileID: 1321287848}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3711,7 +3719,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3985,7 +3993,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4060,7 +4068,7 @@ GameObject:
   - component: {fileID: 1432026005}
   - component: {fileID: 1432026007}
   - component: {fileID: 1432026006}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4095,7 +4103,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4279,7 +4287,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4400,10 +4408,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Room
   enemySpawnParent: {fileID: 1991614367}
   lootSpawnParent: {fileID: 1133125626}
-  torchSpawnParent: {fileID: 228139876}
-  treasureSpot: {fileID: 508024885}
   treasureObject: {fileID: 885235406}
   roomLogic: {fileID: 1590612823}
+  totalEnemiesToSpawn: 12
+  minWaveSize: 4
+  maxWaveSize: 6
+  activationStagger: 0.25
+  maxAggroAtOnce: 2
+  aggroUpdateInterval: 0.5
 --- !u!114 &1590612823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4417,7 +4429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomLogic
   door: {fileID: 1848103586}
-  wallColliders: []
+  room: {fileID: 1590612822}
 --- !u!1 &1597405600
 GameObject:
   m_ObjectHideFlags: 0
@@ -5171,7 +5183,7 @@ GameObject:
   - component: {fileID: 1823058315}
   - component: {fileID: 1823058317}
   - component: {fileID: 1823058316}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5206,7 +5218,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5387,7 +5399,7 @@ GameObject:
   - component: {fileID: 1879443946}
   - component: {fileID: 1879443948}
   - component: {fileID: 1879443947}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5422,7 +5434,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5873,7 +5885,7 @@ GameObject:
   - component: {fileID: 1974797814}
   - component: {fileID: 1974797816}
   - component: {fileID: 1974797815}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5908,7 +5920,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -6249,7 +6261,7 @@ GameObject:
   - component: {fileID: 2098812837}
   - component: {fileID: 2098812839}
   - component: {fileID: 2098812838}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6284,7 +6296,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -6387,7 +6399,7 @@ GameObject:
   - component: {fileID: 2141571125}
   - component: {fileID: 2141571127}
   - component: {fileID: 2141571126}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Top (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6422,7 +6434,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0

@@ -16,8 +16,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform pickupsParent;
 
     [Header("Enemy Counts (per room)")]
-    [SerializeField] private int minEnemiesPerRoom = 2;
-    [SerializeField] private int maxEnemiesPerRoom = 5;
+    [SerializeField] private int minEnemiesPerRoom = 3;
+    [SerializeField] private int maxEnemiesPerRoom = 6;
 
     [Header("Loot Counts (per room)")]
     [SerializeField] private int minLootPerRoom = 1;
@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
         foreach (Room room in rooms)
         {
             room.LockTreasure();
-            room.ClearSpawns();
             GenerateRoomContents(room);
             Debug.Log($"{room.name}: EnemySpawns={room.EnemySpawns.Count}, LootSpawns={room.LootSpawns.Count}, SpawnedEnemies={room.AliveEnemies}");
         }
@@ -46,30 +45,7 @@ public class GameManager : MonoBehaviour
     private void GenerateRoomContents(Room room)
     {
         if (room == null) return;
-
-        // --- Spawn Enemies ---
-        int enemyCount = Random.Range(minEnemiesPerRoom, maxEnemiesPerRoom + 1);
-        enemyCount = Mathf.Min(enemyCount, room.EnemySpawns.Count); // don't exceed available points
-
-        List<Transform> enemyPoints = new List<Transform>(room.EnemySpawns);
-        Shuffle(enemyPoints);
-
-        for (int i = 0; i < enemyCount; i++)
-        {
-            Transform spawn = enemyPoints[i];
-            GameObject prefab = PickEnemyPrefab();
-            if (prefab == null) continue;
-
-            GameObject enemy = Instantiate(prefab, spawn.position, Quaternion.identity, enemiesParent);
-            room.RegisterEnemy(enemy);
-            
-            Enemy enemyScript = enemy.GetComponent<Enemy>();
-            if (enemyScript != null)
-            {
-                enemyScript.Initialize(room);
-            }
-        }
-
+        
         // --- Spawn Loot (HP for now) ---
         int lootCount = Random.Range(minLootPerRoom, maxLootPerRoom + 1);
         lootCount = Mathf.Min(lootCount, room.LootSpawns.Count);
@@ -83,7 +59,6 @@ public class GameManager : MonoBehaviour
             if (hpLootPrefab == null) continue;
 
             GameObject loot = Instantiate(hpLootPrefab, spawn.position, Quaternion.identity, pickupsParent);
-            room.RegisterLoot(loot);
         }
     }
 
@@ -116,5 +91,32 @@ public class GameManager : MonoBehaviour
             Debug.Log("YOU WIN!");
             // Later: show win UI, freeze controls, etc.
         }
+    }
+    public List<Enemy> SpawnEnemiesForRoom(Room room, int count)
+    {
+        List<Enemy> spawned = new List<Enemy>();
+        if (room == null) return spawned;
+
+        List<Transform> points = new List<Transform>(room.EnemySpawns);
+        Shuffle(points);
+
+        for (int i = 0; i < count; i++)
+        {
+            Transform spawn = points[i % points.Count];
+            GameObject prefab = PickEnemyPrefab();
+            if (prefab == null) continue;
+
+            GameObject enemyObj = Instantiate(prefab, spawn.position, Quaternion.identity, enemiesParent);
+
+            Enemy enemy = enemyObj.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.Initialize(room);      // sets room reference
+                room.RegisterEnemy(enemy);   // counts + tracking
+                spawned.Add(enemy);
+            }
+        }
+
+        return spawned;
     }
 }
