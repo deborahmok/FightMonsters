@@ -3,22 +3,25 @@ using UnityEngine.Rendering.Universal;
 
 public class Torch : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer glowSprite;
-    [SerializeField] private float glowRadius = 3f;
-
-    private RoomBrightness parentRoom;
+    [SerializeField] private Light2D torchLight;
+    [SerializeField] private float glowRadius = 4f;
+    [SerializeField] private float intensity = 0.8f;
 
     private void Start()
     {
-        if (glowSprite) 
-            glowSprite.transform.localScale = Vector3.one * glowRadius;
-
-        parentRoom = GetComponentInParent<RoomBrightness>();
-        parentRoom?.RegisterTorch();
+        if (torchLight)
+        {
+            torchLight.pointLightOuterRadius = glowRadius;
+            torchLight.intensity = intensity;
+        }
     }
 
-    private void OnDestroy()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        parentRoom?.UnregisterTorch();
+        if (other.TryGetComponent(out PlayerLight player))
+        {
+            player.AddTorch();
+            Destroy(gameObject);
+        }
     }
 }

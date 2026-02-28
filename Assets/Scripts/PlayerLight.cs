@@ -1,15 +1,15 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerLight : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer glowSprite;
-    [SerializeField] private float baseRadius = 1f;
-    [SerializeField] private float radiusPerTorch = 0.5f;
-    [SerializeField] private float baseAlpha = 0.2f;
-    [SerializeField] private float alphaPerTorch = 0.15f;
+    [SerializeField] private Light2D playerLight;
+    [SerializeField] private float baseRadius = 0f;
+    [SerializeField] private float radiusPerTorch = 1.5f;
+    [SerializeField] private float baseIntensity = 0.3f;
+    [SerializeField] private float intensityPerTorch = 0.25f;
 
     private int torchCount;
-
     public int TorchCount => torchCount;
 
     private void Start()
@@ -33,12 +33,8 @@ public class PlayerLight : MonoBehaviour
 
     private void UpdateGlow()
     {
-        float radius = baseRadius + (torchCount * radiusPerTorch);
-        glowSprite.transform.localScale = Vector3.one * radius;
-
-        float alpha = Mathf.Clamp01(baseAlpha + (torchCount * alphaPerTorch));
-        Color c = glowSprite.color;
-        c.a = alpha;
-        glowSprite.color = c;
+        if (!playerLight) return;
+        playerLight.pointLightOuterRadius = baseRadius + (torchCount * radiusPerTorch);
+        playerLight.intensity = baseIntensity + (torchCount * intensityPerTorch);
     }
 }
