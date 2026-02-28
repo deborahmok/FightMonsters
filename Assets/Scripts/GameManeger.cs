@@ -10,10 +10,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject enemy1Prefab;
     [SerializeField] private GameObject enemy2Prefab;
     [SerializeField] private GameObject hpLootPrefab;
+    [SerializeField] private GameObject torchPrefab;
 
     [Header("Scene Parents")]
     [SerializeField] private Transform enemiesParent;
     [SerializeField] private Transform pickupsParent;
+    [SerializeField] private Transform torchesParent;
 
     [Header("Enemy Counts (per room)")]
     [SerializeField] private int minEnemiesPerRoom = 3;
@@ -22,6 +24,10 @@ public class GameManager : MonoBehaviour
     [Header("Loot Counts (per room)")]
     [SerializeField] private int minLootPerRoom = 1;
     [SerializeField] private int maxLootPerRoom = 3;
+
+    [Header("Torch Counts (per room)")]
+    [SerializeField] private int minTorchesPerRoom = 1;
+    [SerializeField] private int maxTorchesPerRoom = 3;
 
     [Header("Enemy Type Weights")]
     [Range(0f, 1f)]
@@ -59,6 +65,21 @@ public class GameManager : MonoBehaviour
             if (hpLootPrefab == null) continue;
 
             GameObject loot = Instantiate(hpLootPrefab, spawn.position, Quaternion.identity, pickupsParent);
+        }
+
+        // --- Spawn Torches ---
+        if (torchPrefab == null || room.TorchSpawns.Count == 0) return;
+
+        int torchCount = Random.Range(minTorchesPerRoom, maxTorchesPerRoom + 1);
+        torchCount = Mathf.Min(torchCount, room.TorchSpawns.Count);
+
+        List<Transform> torchPoints = new List<Transform>(room.TorchSpawns);
+        Shuffle(torchPoints);
+
+        for (int i = 0; i < torchCount; i++)
+        {
+            Transform spawn = torchPoints[i];
+            Instantiate(torchPrefab, spawn.position, Quaternion.identity, torchesParent);
         }
     }
 
