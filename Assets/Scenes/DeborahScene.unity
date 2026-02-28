@@ -1041,6 +1041,37 @@ Transform:
   - {fileID: 174750377}
   m_Father: {fileID: 1590612821}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &507570193
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 507570194}
+  m_Layer: 0
+  m_Name: Enemies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &507570194
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507570193}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &508024884
 GameObject:
   m_ObjectHideFlags: 0
@@ -1086,6 +1117,7 @@ GameObject:
   - component: {fileID: 547842316}
   - component: {fileID: 547842315}
   - component: {fileID: 547842320}
+  - component: {fileID: 547842322}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1237,7 +1269,7 @@ Transform:
   m_GameObject: {fileID: 547842314}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -5.27, y: 1.53, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1258,6 +1290,20 @@ MonoBehaviour:
   maxHP: 20
   currentHP: 20
   torches: 3
+--- !u!114 &547842322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547842314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a44b18273cec5493ba6841c59295e689, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
+  slashHitboxPrefab: {fileID: 3478332813819337724, guid: dd3648d7bd7614033aa3f3cd702e0356, type: 3}
+  slashCooldown: 0.35
 --- !u!1 &589094455
 GameObject:
   m_ObjectHideFlags: 0
@@ -3334,6 +3380,37 @@ MonoBehaviour:
   lootSpawnParent: {fileID: 1133125626}
   torchSpawnParent: {fileID: 228139876}
   treasureSpot: {fileID: 508024885}
+--- !u!1 &1597405600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1597405601}
+  m_Layer: 0
+  m_Name: Pickups
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1597405601
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597405600}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1628439478
 GameObject:
   m_ObjectHideFlags: 0
@@ -3661,6 +3738,16 @@ MonoBehaviour:
   - {fileID: 52344141}
   - {fileID: 909301200}
   - {fileID: 1590612822}
+  enemy1Prefab: {fileID: 1187904082069337275, guid: 4331d0c05c9d1419b94096a9832ca912, type: 3}
+  enemy2Prefab: {fileID: 6158899275716782592, guid: e5b3f22cf4bed4fdbb9604bc5ca06a07, type: 3}
+  hpLootPrefab: {fileID: 7465153332620142915, guid: 1edb8bea8e6884d6bb24736ac4ef965c, type: 3}
+  enemiesParent: {fileID: 507570194}
+  pickupsParent: {fileID: 1597405601}
+  minEnemiesPerRoom: 2
+  maxEnemiesPerRoom: 5
+  minLootPerRoom: 1
+  maxLootPerRoom: 3
+  enemy1Chance: 0.7
 --- !u!1 &1721835812
 GameObject:
   m_ObjectHideFlags: 0
@@ -3680,7 +3767,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1721835813
 SpriteRenderer:
   serializedVersion: 2
@@ -5204,3 +5291,5 @@ SceneRoots:
   - {fileID: 547842319}
   - {fileID: 1721835814}
   - {fileID: 1917771648}
+  - {fileID: 507570194}
+  - {fileID: 1597405601}

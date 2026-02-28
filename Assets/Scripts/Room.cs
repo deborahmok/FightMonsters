@@ -15,6 +15,12 @@ public class Room : MonoBehaviour
 
     public Transform TreasureSpot => treasureSpot;
 
+    // Track spawned objects so we can clear them if needed
+    private readonly List<GameObject> spawnedEnemies = new();
+    private readonly List<GameObject> spawnedLoot = new();
+
+    public int AliveEnemies { get; private set; } = 0;
+
     private void Awake()
     {
         EnemySpawns = CollectChildren(enemySpawnParent);
@@ -26,10 +32,45 @@ public class Room : MonoBehaviour
     {
         List<Transform> list = new();
         if (parent == null) return list;
-
         for (int i = 0; i < parent.childCount; i++)
             list.Add(parent.GetChild(i));
-
         return list;
+    }
+
+    public void RegisterEnemy(GameObject enemy)
+    {
+        if (enemy == null) return;
+        spawnedEnemies.Add(enemy);
+        AliveEnemies++;
+    }
+
+    public void RegisterLoot(GameObject loot)
+    {
+        if (loot == null) return;
+        spawnedLoot.Add(loot);
+    }
+
+    public void ClearSpawns()
+    {
+        foreach (var e in spawnedEnemies)
+            if (e != null) Destroy(e);
+        foreach (var l in spawnedLoot)
+            if (l != null) Destroy(l);
+
+        spawnedEnemies.Clear();
+        spawnedLoot.Clear();
+        AliveEnemies = 0;
+    }
+    
+    public void NotifyEnemyDied()
+    {
+        AliveEnemies = Mathf.Max(0, AliveEnemies - 1);
+        Debug.Log($"{name} enemy died. AliveEnemies now: {AliveEnemies}");
+
+        if (AliveEnemies == 0)
+        {
+            Debug.Log($"{name} cleared! (Treasure unlock later)");
+            // Later: Unlock treasure here
+        }
     }
 }
