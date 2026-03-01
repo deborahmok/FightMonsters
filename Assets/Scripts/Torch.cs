@@ -20,7 +20,7 @@ public class Torch : MonoBehaviour
     {
         if (other.TryGetComponent(out PlayerLight player))
         {
-            player.AddTorch();
+            player.AddTorch(1);
             Destroy(gameObject);
         }
     }
