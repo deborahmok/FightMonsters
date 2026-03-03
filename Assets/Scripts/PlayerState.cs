@@ -20,11 +20,11 @@ public class PlayerState : MonoBehaviour
         // Ensure valid start
         currentHP = Mathf.Clamp(currentHP, 0, maxHP);
     }
-
+    
     public void Heal(int amount)
     {
-        if (amount <= 0 || IsDead) return;
-        currentHP = Mathf.Clamp(currentHP + amount, 0, maxHP);
+        if (amount <= 0) return;
+        currentHP = Mathf.Min(currentHP + amount, maxHP);
     }
 
     public void TakeDamage(int amount)
