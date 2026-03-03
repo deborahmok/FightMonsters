@@ -8,6 +8,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float wanderSpeed = 1.2f;
     [SerializeField] private float wanderChangeInterval = 1.0f;
 
+    [Header("Phase / Visuals")]
+    [SerializeField] private bool shrinkOnFirstHit = false; // enable for type 2
+    [SerializeField] private float shrinkScaleFactor = 0.5f;
+
     private Vector2 wanderDir = Vector2.zero;
     private float nextWanderChangeTime = 0f;
 
@@ -20,10 +24,15 @@ public class Enemy : MonoBehaviour
     private Transform player;
     private Rigidbody2D rb;
 
+    private Vector3 originalScale;
+    private bool hasShrunk = false;
+
     private void Awake()
     {
         currentHP = maxHP;
         rb = GetComponent<Rigidbody2D>();
+
+        originalScale = transform.localScale;
 
         GameObject pObj = GameObject.FindGameObjectWithTag("Player");
         player = (pObj != null) ? pObj.transform : null;
@@ -39,11 +48,29 @@ public class Enemy : MonoBehaviour
         isActive = false;
         rb.linearVelocity = Vector2.zero;
         myRoom = room;
+
+        currentHP = maxHP;
+        transform.localScale = originalScale;
+        hasShrunk = false;
     }
 
     public void TakeHit(int damage = 1)
     {
+        int previousHP = currentHP;
         currentHP -= damage;
+
+        if (shrinkOnFirstHit && !hasShrunk)
+        {
+            // "phase change" = went from full HP to something less, but still > 0
+            bool wasFullHP = (previousHP == maxHP);
+            bool stillAlive = (currentHP > 0);
+
+            if (wasFullHP && stillAlive)
+            {
+                transform.localScale = originalScale * shrinkScaleFactor;
+                hasShrunk = true;
+            }
+        }
         if (currentHP <= 0) Die();
     }
 
