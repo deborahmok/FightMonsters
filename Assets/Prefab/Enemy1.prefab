@@ -188,3 +188,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTouchDamage
   touchDamage: 1
   damageCooldown: 0.5
+  canStealTorch: 1
+  torchAmount: 1
+  torchStealCooldown: 1

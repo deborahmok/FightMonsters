@@ -56,3 +56,6 @@ ServerData/
 # =============== Others ===============
 *.log
 *.slnx
+
+# =============== Backups ===============
+_Recovery*

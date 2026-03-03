@@ -35,37 +35,38 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private int totalTreasuresToWin = 3;
     private int treasuresCollected = 0;
-    
-    [Header("Dynamic Torch Spawning")]
-    [SerializeField] private bool enableDynamicTorchSpawn = true;
 
-    [Tooltip("Hard cap for total torches currently in the scene (includes initial torches).")]
-    [SerializeField] private int maxTorchesInScene = 10;
+    // -------- NEW: Dynamic HP Loot spawning --------
+    [Header("Dynamic HP Loot Spawning")]
+    [SerializeField] private bool enableDynamicHpLootSpawn = true;
 
     [Tooltip("When HP is LOW, wait about this many seconds between spawn attempts.")]
-    [SerializeField] private float spawnIntervalLowHP = 3f;
+    [SerializeField] private float lootSpawnIntervalLowHP = 3f;
 
     [Tooltip("When HP is HIGH, wait about this many seconds between spawn attempts.")]
-    [SerializeField] private float spawnIntervalHighHP = 12f;
+    [SerializeField] private float lootSpawnIntervalHighHP = 12f;
 
     [Tooltip("Spawn chance per attempt when HP is HIGH (0-1).")]
     [Range(0f, 1f)]
-    [SerializeField] private float spawnChanceHighHP = 0.15f;
+    [SerializeField] private float lootSpawnChanceHighHP = 0.15f;
 
     [Tooltip("Spawn chance per attempt when HP is LOW (0-1).")]
     [Range(0f, 1f)]
-    [SerializeField] private float spawnChanceLowHP = 0.85f;
+    [SerializeField] private float lootSpawnChanceLowHP = 0.85f;
 
-    [Tooltip("How close we check for an existing torch to avoid stacking spawns.")]
-    [SerializeField] private float torchOverlapRadius = 0.2f;
+    [Tooltip("How close we check for an existing HP loot to avoid stacking spawns.")]
+    [SerializeField] private float lootOverlapRadius = 0.2f;
 
     [Header("Player Reference (for HP weighting)")]
     [SerializeField] private PlayerState player;
-    
-    [Header("Torch Lifetime Budget")]
-    [SerializeField] private int maxTorchesEver = 10;
-    private int torchesSpawnedTotal = 0;
-    
+
+    [Header("Dynamic Loot Lifetime Budget")]
+    [Tooltip("Max number of dynamically spawned HP loot in this run.")]
+    [SerializeField] private int maxDynamicLootEver = 10;
+
+    private int dynamicLootSpawnedTotal = 0;
+    // -----------------------------------------------
+
     public int GetTreasuresCollected()
     {
         return treasuresCollected;
@@ -75,7 +76,14 @@ public class GameManager : MonoBehaviour
     {
         return totalTreasuresToWin;
     }
-    
+
+    private void Awake()
+    {
+        // For safety, auto-find PlayerState if not wired in Inspector
+        if (player == null)
+            player = FindObjectOfType<PlayerState>();
+    }
+
     private void Start()
     {
         Debug.Log("Rooms found: " + rooms.Count);
@@ -86,19 +94,15 @@ public class GameManager : MonoBehaviour
             GenerateRoomContents(room);
             Debug.Log($"{room.name}: EnemySpawns={room.EnemySpawns.Count}, LootSpawns={room.LootSpawns.Count}, SpawnedEnemies={room.AliveEnemies}");
         }
-        if (enableDynamicTorchSpawn)
-            StartCoroutine(DynamicTorchSpawnLoop());
+
+        if (enableDynamicHpLootSpawn)
+            StartCoroutine(DynamicHpLootSpawnLoop());
     }
 
-    private void Awake()
-    {
-        if (player == null) player = FindObjectOfType<PlayerState>();
-    }
-    
     private void GenerateRoomContents(Room room)
     {
         if (room == null) return;
-        
+
         // --- Spawn Loot (HP for now) ---
         int lootCount = Random.Range(minLootPerRoom, maxLootPerRoom + 1);
         lootCount = Mathf.Min(lootCount, room.LootSpawns.Count);
@@ -112,9 +116,10 @@ public class GameManager : MonoBehaviour
             if (hpLootPrefab == null) continue;
 
             GameObject loot = Instantiate(hpLootPrefab, spawn.position, Quaternion.identity, pickupsParent);
+            // If you want Room to track these, you could call room.RegisterLoot(loot) here
         }
 
-        // --- Spawn Torches ---
+        // --- Spawn Torches (UNCHANGED from original) ---
         if (torchPrefab == null || room.TorchSpawns.Count == 0) return;
 
         int torchCount = Random.Range(minTorchesPerRoom, maxTorchesPerRoom + 1);
@@ -122,7 +127,7 @@ public class GameManager : MonoBehaviour
 
         List<Transform> torchPoints = new List<Transform>(room.TorchSpawns);
         Shuffle(torchPoints);
-        
+
         for (int i = 0; i < torchCount; i++)
         {
             Transform spawn = torchPoints[i];
@@ -148,7 +153,7 @@ public class GameManager : MonoBehaviour
             (list[i], list[j]) = (list[j], list[i]);
         }
     }
-    
+
     public void CollectTreasure()
     {
         treasuresCollected++;
@@ -160,6 +165,7 @@ public class GameManager : MonoBehaviour
             // Later: show win UI, freeze controls, etc.
         }
     }
+
     public List<Enemy> SpawnEnemiesForRoom(Room room, int count)
     {
         List<Enemy> spawned = new List<Enemy>();
@@ -187,64 +193,68 @@ public class GameManager : MonoBehaviour
 
         return spawned;
     }
-    
-        private System.Collections.IEnumerator DynamicTorchSpawnLoop()
+
+    // --------------- Dynamic HP Loot logic ---------------
+
+    private System.Collections.IEnumerator DynamicHpLootSpawnLoop()
     {
         while (true)
         {
-            // If we've hit the permanent lifetime cap, stop trying forever.
-            if (!enableDynamicTorchSpawn || torchesSpawnedTotal >= maxTorchesEver)
+            if (!enableDynamicHpLootSpawn || dynamicLootSpawnedTotal >= maxDynamicLootEver)
                 yield break;
 
-            float wait = GetNextTorchSpawnInterval();
+            float wait = GetNextLootSpawnInterval();
             yield return new WaitForSeconds(wait);
 
-            TrySpawnTorchWeightedByHP();
+            TrySpawnHpLootWeightedByHP();
         }
     }
 
-    private float GetNextTorchSpawnInterval()
+    private float GetNextLootSpawnInterval()
     {
         float hp01 = GetPlayerHP01();
         // Low HP => smaller wait (more frequent). High HP => bigger wait (less frequent).
-        return Mathf.Lerp(spawnIntervalLowHP, spawnIntervalHighHP, hp01);
+        return Mathf.Lerp(lootSpawnIntervalLowHP, lootSpawnIntervalHighHP, hp01);
     }
 
-    private void TrySpawnTorchWeightedByHP()
+    private void TrySpawnHpLootWeightedByHP()
     {
-        if (!enableDynamicTorchSpawn) return;
+        if (!enableDynamicHpLootSpawn) return;
+        if (dynamicLootSpawnedTotal >= maxDynamicLootEver) return;
 
-        // Permanent cap: total torches EVER spawned this run (initial + dynamic)
-        if (torchesSpawnedTotal >= maxTorchesEver) return;
-
-        if (torchPrefab == null) return;
+        if (hpLootPrefab == null) return;
         if (rooms == null || rooms.Count == 0) return;
 
         float hp01 = GetPlayerHP01();
-        float chance = Mathf.Lerp(spawnChanceLowHP, spawnChanceHighHP, hp01); // low HP => high chance
+        float chance = Mathf.Lerp(lootSpawnChanceLowHP, lootSpawnChanceHighHP, hp01); // low HP => high chance
         if (Random.value > chance) return;
 
-        // Pick a random room that has TorchSpawns
+        // Pick a random room that has LootSpawns
         List<Room> validRooms = new List<Room>();
         foreach (var r in rooms)
         {
-            if (r != null && r.TorchSpawns != null && r.TorchSpawns.Count > 0)
+            if (r != null && r.LootSpawns != null && r.LootSpawns.Count > 0)
                 validRooms.Add(r);
         }
         if (validRooms.Count == 0) return;
 
         Room room = validRooms[Random.Range(0, validRooms.Count)];
-        Transform spawn = room.TorchSpawns[Random.Range(0, room.TorchSpawns.Count)];
+        Transform spawn = room.LootSpawns[Random.Range(0, room.LootSpawns.Count)];
         if (spawn == null) return;
 
-        // Prevent spawning on top of an existing torch (so it doesn't stack visually)
-        Collider2D hit = Physics2D.OverlapCircle(spawn.position, torchOverlapRadius);
-        if (hit != null && hit.GetComponentInParent<Torch>() != null) return;
+        // Prevent stacking HP loot on top of itself (simple radius check)
+        Collider2D hit = Physics2D.OverlapCircle(spawn.position, lootOverlapRadius);
+        if (hit != null)
+        {
+            // If you have a specific tag/layer for HP loot, you can refine this:
+            // if (hit.CompareTag("HPLoot")) return;
+            // For now, just skip if *anything* is sitting exactly there.
+            return;
+        }
 
-        Transform parent = room.TorchSpawnParent != null ? room.TorchSpawnParent : torchesParent;
-
-        Instantiate(torchPrefab, spawn.position, Quaternion.identity, parent);
-        torchesSpawnedTotal++; // IMPORTANT: permanent budget increment
+        Transform parent = (pickupsParent != null) ? pickupsParent : null;
+        Instantiate(hpLootPrefab, spawn.position, Quaternion.identity, parent);
+        dynamicLootSpawnedTotal++;
     }
 
     private float GetPlayerHP01()
