@@ -36,6 +36,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int totalTreasuresToWin = 3;
     private int treasuresCollected = 0;
     
+    public int GetTreasuresCollected()
+    {
+        return treasuresCollected;
+    }
+
+    public int GetTotalTreasures()
+    {
+        return totalTreasuresToWin;
+    }
+    
     private void Start()
     {
         Debug.Log("Rooms found: " + rooms.Count);
