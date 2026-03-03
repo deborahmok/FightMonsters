@@ -8543,6 +8543,15 @@ MonoBehaviour:
   maxTorchesPerRoom: 3
   enemy1Chance: 0.7
   totalTreasuresToWin: 3
+  enableDynamicTorchSpawn: 1
+  maxTorchesInScene: 10
+  spawnIntervalLowHP: 3
+  spawnIntervalHighHP: 12
+  spawnChanceHighHP: 0.15
+  spawnChanceLowHP: 0.85
+  torchOverlapRadius: 0.2
+  player: {fileID: 853830943}
+  maxTorchesEver: 10
 --- !u!4 &1855632390
 Transform:
   m_ObjectHideFlags: 0

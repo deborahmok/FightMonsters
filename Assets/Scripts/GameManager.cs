@@ -36,6 +36,36 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int totalTreasuresToWin = 3;
     private int treasuresCollected = 0;
     
+    [Header("Dynamic Torch Spawning")]
+    [SerializeField] private bool enableDynamicTorchSpawn = true;
+
+    [Tooltip("Hard cap for total torches currently in the scene (includes initial torches).")]
+    [SerializeField] private int maxTorchesInScene = 10;
+
+    [Tooltip("When HP is LOW, wait about this many seconds between spawn attempts.")]
+    [SerializeField] private float spawnIntervalLowHP = 3f;
+
+    [Tooltip("When HP is HIGH, wait about this many seconds between spawn attempts.")]
+    [SerializeField] private float spawnIntervalHighHP = 12f;
+
+    [Tooltip("Spawn chance per attempt when HP is HIGH (0-1).")]
+    [Range(0f, 1f)]
+    [SerializeField] private float spawnChanceHighHP = 0.15f;
+
+    [Tooltip("Spawn chance per attempt when HP is LOW (0-1).")]
+    [Range(0f, 1f)]
+    [SerializeField] private float spawnChanceLowHP = 0.85f;
+
+    [Tooltip("How close we check for an existing torch to avoid stacking spawns.")]
+    [SerializeField] private float torchOverlapRadius = 0.2f;
+
+    [Header("Player Reference (for HP weighting)")]
+    [SerializeField] private PlayerState player;
+    
+    [Header("Torch Lifetime Budget")]
+    [SerializeField] private int maxTorchesEver = 10;
+    private int torchesSpawnedTotal = 0;
+    
     public int GetTreasuresCollected()
     {
         return treasuresCollected;
@@ -56,8 +86,15 @@ public class GameManager : MonoBehaviour
             GenerateRoomContents(room);
             Debug.Log($"{room.name}: EnemySpawns={room.EnemySpawns.Count}, LootSpawns={room.LootSpawns.Count}, SpawnedEnemies={room.AliveEnemies}");
         }
+        if (enableDynamicTorchSpawn)
+            StartCoroutine(DynamicTorchSpawnLoop());
     }
 
+    private void Awake()
+    {
+        if (player == null) player = FindObjectOfType<PlayerState>();
+    }
+    
     private void GenerateRoomContents(Room room)
     {
         if (room == null) return;
@@ -85,7 +122,7 @@ public class GameManager : MonoBehaviour
 
         List<Transform> torchPoints = new List<Transform>(room.TorchSpawns);
         Shuffle(torchPoints);
-
+        
         for (int i = 0; i < torchCount; i++)
         {
             Transform spawn = torchPoints[i];
@@ -149,5 +186,75 @@ public class GameManager : MonoBehaviour
         }
 
         return spawned;
+    }
+    
+        private System.Collections.IEnumerator DynamicTorchSpawnLoop()
+    {
+        while (true)
+        {
+            // If we've hit the permanent lifetime cap, stop trying forever.
+            if (!enableDynamicTorchSpawn || torchesSpawnedTotal >= maxTorchesEver)
+                yield break;
+
+            float wait = GetNextTorchSpawnInterval();
+            yield return new WaitForSeconds(wait);
+
+            TrySpawnTorchWeightedByHP();
+        }
+    }
+
+    private float GetNextTorchSpawnInterval()
+    {
+        float hp01 = GetPlayerHP01();
+        // Low HP => smaller wait (more frequent). High HP => bigger wait (less frequent).
+        return Mathf.Lerp(spawnIntervalLowHP, spawnIntervalHighHP, hp01);
+    }
+
+    private void TrySpawnTorchWeightedByHP()
+    {
+        if (!enableDynamicTorchSpawn) return;
+
+        // Permanent cap: total torches EVER spawned this run (initial + dynamic)
+        if (torchesSpawnedTotal >= maxTorchesEver) return;
+
+        if (torchPrefab == null) return;
+        if (rooms == null || rooms.Count == 0) return;
+
+        float hp01 = GetPlayerHP01();
+        float chance = Mathf.Lerp(spawnChanceLowHP, spawnChanceHighHP, hp01); // low HP => high chance
+        if (Random.value > chance) return;
+
+        // Pick a random room that has TorchSpawns
+        List<Room> validRooms = new List<Room>();
+        foreach (var r in rooms)
+        {
+            if (r != null && r.TorchSpawns != null && r.TorchSpawns.Count > 0)
+                validRooms.Add(r);
+        }
+        if (validRooms.Count == 0) return;
+
+        Room room = validRooms[Random.Range(0, validRooms.Count)];
+        Transform spawn = room.TorchSpawns[Random.Range(0, room.TorchSpawns.Count)];
+        if (spawn == null) return;
+
+        // Prevent spawning on top of an existing torch (so it doesn't stack visually)
+        Collider2D hit = Physics2D.OverlapCircle(spawn.position, torchOverlapRadius);
+        if (hit != null && hit.GetComponentInParent<Torch>() != null) return;
+
+        Transform parent = room.TorchSpawnParent != null ? room.TorchSpawnParent : torchesParent;
+
+        Instantiate(torchPrefab, spawn.position, Quaternion.identity, parent);
+        torchesSpawnedTotal++; // IMPORTANT: permanent budget increment
+    }
+
+    private float GetPlayerHP01()
+    {
+        if (player == null) return 1f;
+
+        float max = player.MaxHP;
+        float cur = player.CurrentHP;
+
+        if (max <= 0f) return 1f;
+        return Mathf.Clamp01(cur / max);
     }
 }

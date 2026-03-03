@@ -35,7 +35,7 @@ public class Room : MonoBehaviour
     private int spawnedSoFar = 0;
     public int AliveEnemies { get; private set; } = 0;
     private bool roomStarted = false;
-    
+    public Transform TorchSpawnParent => torchSpawnParent;
     private void Awake()
     {
         EnemySpawns = CollectChildren(enemySpawnParent);
