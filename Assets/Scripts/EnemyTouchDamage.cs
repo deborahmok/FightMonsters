@@ -7,7 +7,7 @@ public class EnemyTouchDamage : MonoBehaviour
     [SerializeField] private float damageCooldown = 0.5f;
 
     [Header("Torch Steal")]
-    [SerializeField] private bool canStealTorch = false;
+    [SerializeField] private bool canStealTorch = false; // enable for type 1
     [SerializeField] private int torchAmount = 1;
     [SerializeField] private float torchStealCooldown = 1.0f;
 
