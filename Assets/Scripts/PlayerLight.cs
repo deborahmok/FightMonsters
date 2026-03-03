@@ -15,8 +15,7 @@ public class PlayerLight : MonoBehaviour
 
     private float baseRadius;
     private float baseIntensity;
-    // private int torchCount;
-    // public int TorchCount => torchCount;
+    public float CurrentRadius => playerLight != null ? playerLight.pointLightOuterRadius : 0f;    // public int TorchCount => torchCount;
     
     private void Awake()
     {
@@ -33,9 +32,11 @@ public class PlayerLight : MonoBehaviour
         }
         int startingTorches = playerState.Torches;
 
-        baseRadius = playerLight.pointLightOuterRadius + (startingTorches * radiusPerTorch);
-        baseIntensity = playerLight.intensity + (startingTorches * intensityPerTorch);
-
+        // baseRadius = playerLight.pointLightOuterRadius + (startingTorches * radiusPerTorch);
+        // baseIntensity = playerLight.intensity + (startingTorches * intensityPerTorch);
+        baseRadius = playerLight.pointLightOuterRadius;
+        baseIntensity = playerLight.intensity;
+        
         playerLight.pointLightOuterRadius = baseRadius;
         playerLight.intensity = baseIntensity;
 
