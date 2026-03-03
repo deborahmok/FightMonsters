@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class Enemy : MonoBehaviour
 
     private Vector2 wanderDir = Vector2.zero;
     private float nextWanderChangeTime = 0f;
+    private SpriteRenderer sr;
+    private Color originalColor;
 
     public bool IsAggro { get; private set; } = false;
 
@@ -31,9 +34,11 @@ public class Enemy : MonoBehaviour
     {
         currentHP = maxHP;
         rb = GetComponent<Rigidbody2D>();
-
         originalScale = transform.localScale;
-
+        
+        sr = GetComponent<SpriteRenderer>();
+        originalColor = sr.color;
+        
         GameObject pObj = GameObject.FindGameObjectWithTag("Player");
         player = (pObj != null) ? pObj.transform : null;
     }
@@ -58,7 +63,18 @@ public class Enemy : MonoBehaviour
     {
         int previousHP = currentHP;
         currentHP -= damage;
-
+        //enemy take hit
+        Vector2 knockDir = (transform.position - player.position).normalized;
+        rb.AddForce(knockDir * 2f, ForceMode2D.Impulse);
+        
+        //player take hit camera shake
+        CameraShake camShake = FindObjectOfType<CameraShake>();
+        if (camShake != null)
+            camShake.Shake(0.04f, 0.03f);
+        
+        StartCoroutine(Flash());
+        StartCoroutine(HitStop());
+        
         if (shrinkOnFirstHit && !hasShrunk)
         {
             // "phase change" = went from full HP to something less, but still > 0
@@ -73,7 +89,21 @@ public class Enemy : MonoBehaviour
         }
         if (currentHP <= 0) Die();
     }
-
+    
+    private System.Collections.IEnumerator HitStop()
+    {
+        Time.timeScale = 0.05f;
+        yield return new WaitForSecondsRealtime(0.05f);
+        Time.timeScale = 1f;
+    }
+    
+    private System.Collections.IEnumerator Flash()
+    {
+        sr.color = Color.white;
+        yield return new WaitForSeconds(0.1f);
+        sr.color = originalColor;
+    }
+    
     private void FixedUpdate()
     {
         if (!isActive)
@@ -104,6 +134,14 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        StartCoroutine(DeathEffect());
+    }
+
+    private IEnumerator DeathEffect()
+    {
+        transform.localScale *= 1.3f;
+        yield return new WaitForSeconds(0.05f);
+
         if (myRoom != null)
             myRoom.NotifyEnemyDied();
 

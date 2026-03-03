@@ -448,6 +448,8 @@ MonoBehaviour:
   maxHeal: 3
   randomizeOnSpawn: 1
   valueText: {fileID: 716322281557534480}
+  floatingTextPrefab: {fileID: 9034044639216543901, guid: c54af9b62251b41c3b7b28550aa04905, type: 3}
+  uiCanvas: {fileID: 0}
 --- !u!114 &-8102488899686643125
 MonoBehaviour:
   m_ObjectHideFlags: 0

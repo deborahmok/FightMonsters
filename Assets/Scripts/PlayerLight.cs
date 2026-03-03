@@ -20,7 +20,7 @@ public class PlayerLight : MonoBehaviour
     private void Awake()
     {
         if (playerLight == null)
-            playerLight = GetComponentInChildren<Light2D>();
+            playerLight = GetComponent<Light2D>();
 
         playerState = GetComponent<PlayerState>();
 
@@ -68,5 +68,19 @@ public class PlayerLight : MonoBehaviour
         int torchCount = playerState.Torches;
         playerLight.pointLightOuterRadius = baseRadius + (torchCount * radiusPerTorch);
         playerLight.intensity = baseIntensity + (torchCount * intensityPerTorch);
+    }
+
+    void Update()
+    {
+        // Keep radius/intensity synced to torch count
+        int torchCount = playerState.Torches;
+
+        float targetRadius = baseRadius + torchCount * radiusPerTorch;
+        float targetIntensity = baseIntensity + torchCount * intensityPerTorch;
+
+        // Flicker on top of target intensity
+        float flicker = (Mathf.PerlinNoise(Time.time * 3f, 0f) - 0.5f) * 2f * 0.2f; // -0.2..+0.2
+        playerLight.pointLightOuterRadius = targetRadius;
+        playerLight.intensity = Mathf.Max(0f, targetIntensity + flicker);
     }
 }
