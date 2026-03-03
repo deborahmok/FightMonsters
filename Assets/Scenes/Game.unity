@@ -4669,8 +4669,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLight
   playerLight: {fileID: 1259457002}
-  radiusPerTorch: 0.2
-  intensityPerTorch: 0.2
+  radiusPerTorch: 0.3
+  intensityPerTorch: 0.4
 --- !u!114 &853830942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7475,6 +7475,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTouchDamage
   touchDamage: 1
   damageCooldown: 0.5
+  canStealTorch: 0
+  torchAmount: 1
+  torchStealCooldown: 1
 --- !u!58 &1679124085
 CircleCollider2D:
   m_ObjectHideFlags: 0
