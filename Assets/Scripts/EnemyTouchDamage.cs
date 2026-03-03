@@ -7,14 +7,23 @@ public class EnemyTouchDamage : MonoBehaviour
 
     private float nextDamageTime = 0f;
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnCollisionStay2D(Collision2D collision)
     {
+        // collider we are touching
+        Collider2D other = collision.collider;
+
+        if (!other.CompareTag("Player")) return;
+
+        Debug.Log("COLLISION STAY with: " + other.name);
+
         if (Time.time < nextDamageTime) return;
-    
+
         PlayerState player = other.GetComponent<PlayerState>();
         if (player == null) return;
-    
+
+        Debug.Log("Enemy damaged player: " + other.name);
         player.TakeDamage(touchDamage);
+
         nextDamageTime = Time.time + damageCooldown;
     }
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2629890330776837513}
   - component: {fileID: 4305485588342006252}
   - component: {fileID: -5706505938726694805}
+  - component: {fileID: 8098226330675657906}
   m_Layer: 3
   m_Name: Enemy1
   m_TagString: Untagged
@@ -173,3 +174,17 @@ MonoBehaviour:
   moveSpeed: 2
   wanderSpeed: 1.2
   wanderChangeInterval: 1
+--- !u!114 &8098226330675657906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187904082069337275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17b87aed54af94b7e937d6a97d6220ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyTouchDamage
+  touchDamage: 1
+  damageCooldown: 0.5
