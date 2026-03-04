@@ -9,6 +9,7 @@ public class TreasurePickup : MonoBehaviour
         GameManager gm = FindObjectOfType<GameManager>();
         if (gm != null)
             gm.CollectTreasure();
+            AudioManager.Instance.PlayTreasurePickup();
 
         Destroy(gameObject);
     }

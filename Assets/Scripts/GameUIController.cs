@@ -38,6 +38,7 @@ public class GameUIController : MonoBehaviour
         // LOSE condition
         if (player.CurrentHP <= 0)
         {
+            AudioManager.Instance.PlayLose();
             EndLose();
             return;
         }
@@ -45,6 +46,7 @@ public class GameUIController : MonoBehaviour
         // WIN condition
         if (gameManager.GetTreasuresCollected() >= gameManager.GetTotalTreasures())
         {
+            AudioManager.Instance.PlayWin();
             EndWin();
             return;
         }

@@ -190,6 +190,7 @@ public class Room : MonoBehaviour
 
     public void UnlockTreasure()
     {
+        AudioManager.Instance.PlayRoomClear();
         if (treasureObject != null)
             treasureObject.SetActive(true);
     }

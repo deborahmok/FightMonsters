@@ -51,6 +51,7 @@ public class PlayerLight : MonoBehaviour
 
     public void AddTorch(int amount = 1)
     {
+        AudioManager.Instance.PlayTorchPickup();
         playerState.AddTorches(amount);
         UpdateGlow();
     }

@@ -27,7 +27,7 @@ public class PlayerCombat : MonoBehaviour
             Debug.LogWarning("No slashHitboxPrefab assigned on PlayerCombat.");
             return;
         }
-
+        AudioManager.Instance.PlayAttack();
         Instantiate(slashHitboxPrefab, transform.position, Quaternion.identity);
     }
 }

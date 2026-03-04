@@ -91,6 +91,7 @@ public class HPLootPickup : MonoBehaviour
         PlayerState ps = other.GetComponent<PlayerState>();
         if (ps == null) return;
 
+        AudioManager.Instance.PlayHPPickup();
         ps.Heal(healAmount);
         SpawnFloatingText(transform.position, "+" + healAmount);
 

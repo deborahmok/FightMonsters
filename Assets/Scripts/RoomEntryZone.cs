@@ -9,6 +9,7 @@ public class RoomEntryZone : MonoBehaviour
         if (triggered) return;
         if (!other.CompareTag("Player")) return;
 
+        AudioManager.Instance.PlaySpawnStart();
         triggered = true;
         GetComponentInParent<RoomLogic>()?.OnPlayerEnteredRoom();
         Debug.Log("EntryZone triggered by: " + other.name);

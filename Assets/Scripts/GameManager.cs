@@ -162,7 +162,7 @@ public class GameManager : MonoBehaviour
         if (treasuresCollected >= totalTreasuresToWin)
         {
             Debug.Log("YOU WIN!");
-            // Later: show win UI, freeze controls, etc.
+            AudioManager.Instance.PlayWin();
         }
     }
 
@@ -241,6 +241,7 @@ public class GameManager : MonoBehaviour
         Room room = validRooms[Random.Range(0, validRooms.Count)];
         Transform spawn = room.LootSpawns[Random.Range(0, room.LootSpawns.Count)];
         if (spawn == null) return;
+        AudioManager.Instance.PlayLootSpawn();
 
         // Prevent stacking HP loot on top of itself (simple radius check)
         Collider2D hit = Physics2D.OverlapCircle(spawn.position, lootOverlapRadius);
